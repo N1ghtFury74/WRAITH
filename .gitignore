@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# WRAITH case workspaces & evidence — NEVER commit real evidence
+cases/
+eviedence_test/
+evidence_test/
+evidence/
+*.dit
+*.ntds
+*.duckdb
+SYSTEM
+SECURITY
+SAM
+SOFTWARE
+DEFAULT
+*.hve
+edb*.log
+edb*.jrs
+*.chk
+temp.edb
+*.evtx
+
+# Local-only
+CLAUDE.local.md
+.DS_Store
+
+# Claude / internal process artifacts — PRIVATE, never published to the public repo
+.claude/
+CLAUDE.md
+*.local.md
+# Internal process docs (research reports, module notes, test gates, contributor handbook)
+docs/research/
+docs/modules/
+docs/gates/
+docs/handbook/
+# Internal design spec
+WRAITH_Design_Spec*.pdf
+
+# Node (if UI uses it)
+node_modules/

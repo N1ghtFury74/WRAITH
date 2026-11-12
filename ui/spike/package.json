@@ -1,0 +1,28 @@
+{
+  "name": "wraith-ui-spike",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "THROWAWAY confidence-spike for the M7 graph stack (sigma.js + graphology). NOT the production app.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "graphology": "0.26.0",
+    "graphology-layout-forceatlas2": "0.10.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sigma": "3.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "graphology-types": "0.24.8",
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
+  }
+}

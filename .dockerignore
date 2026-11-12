@@ -1,0 +1,81 @@
+# WRAITH .dockerignore — keep the build context small, deterministic, and private.
+# Anything excluded here never enters the image. The SPA dist is rebuilt in-image;
+# evidence/cases/secrets and the Claude/process files must never ship.
+
+# --- VCS / tooling ---
+.git
+.gitignore
+.gitattributes
+.github
+
+# --- Python runtime/build junk ---
+.venv
+venv
+__pycache__
+**/__pycache__
+*.py[cod]
+*.egg-info
+.eggs
+build
+dist
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+.cache
+
+# --- Node: installed deps + prebuilt SPA (rebuilt inside stage 1) ---
+node_modules
+**/node_modules
+ui/web/dist
+ui/web/.vite
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# --- Case workspaces, evidence, secrets — NEVER ship ---
+cases
+cases/
+eviedence_test
+evidence_test
+evidence
+fixtures
+*.dit
+*.ntds
+*.duckdb
+*.hve
+SYSTEM
+SECURITY
+SAM
+SOFTWARE
+DEFAULT
+edb*.log
+edb*.jrs
+*.chk
+temp.edb
+*.evtx
+
+# --- Private process / Claude files (owner wants these kept out of the image) ---
+.claude
+CLAUDE.md
+CLAUDE.local.md
+docs/research
+docs/modules
+docs/gates
+docs/handbook
+
+# --- Spec / large local-only artifacts not needed at runtime ---
+WRAITH_Design_Spec_v0.1.pdf
+requirements.lock
+tests
+
+# --- Docker artifacts themselves ---
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# --- Editor / OS cruft ---
+.DS_Store
+.idea
+.vscode
+*.local

@@ -1,0 +1,145 @@
+[project]
+name = "wraith"
+version = "0.0.0"
+description = "Offline, dead-disk Active Directory relationship mapper for authorized pentest & IR."
+requires-python = ">=3.12"
+readme = "README.md"
+# Dependencies are added per-module as research locks each choice (reuse-not-reimplement).
+# Module 1 (Foundation) — pinned, all pip-vendorable wheels, no runtime network:
+dependencies = [
+    "cryptography==50.0.2",  # AES-256-GCM AEAD + scrypt KDF (Apache-2.0 OR BSD-3-Clause)
+    "argon2-cffi==25.1.0",   # argon2id KEK derivation (MIT)
+    "duckdb==2.0.0",         # canonical/analytics store, provenance ledger (MIT)
+    "pydantic==2.14.1",      # data shapes + SecretStr/SecretBytes redaction (MIT)
+    "typer==0.27.3",         # CLI (MIT)
+    # Module 2 (NTDS parsing) — ESE reader backend only this pass; the single
+    # swappable backend import lives in wraith/parsing/ese_backend.py. The whole
+    # dissect stack is pinned explicitly (not left to float transitively) for a
+    # reproducible, air-gappable resolve. NOTE: dissect.database==1.1 requires
+    # dissect.util>=3.24.dev1,<4; the stable util line tops out at 3.9, so the
+    # .dev9 pin is UNAVOIDABLE on the maintained backend and is accepted because
+    # we pin + vendor exact wheels (see docs/packaging/ air-gap note).
+    "dissect.database==1.1",  # ESE reader (Apache-2.0); maintained successor to dissect.esedb
+    "dissect.cstruct==4.7",   # transitive of dissect.database, pinned (Apache-2.0)
+    "dissect.util==3.25.dev9",  # transitive; compiled _native (abi3), pinned (Apache-2.0)
+    # Module 2 sub-layer 2b (NTDS secret decryption) — crypto delegated to Impacket
+    # (boot key + PEK + NTDSHashes), routed through the dissect impacket shim. Pure-
+    # Python wheel, no runtime network on the local-.dit path.
+    # LICENSE: impacket upstream is "Apache modified" (SecureAuth/Fortra), NOT BSD-2.
+    "impacket==0.13.1",       # boot key / PEK / NTDSHashes (License: "Apache modified")
+    "pycryptodomex==3.24.1",  # crypto primitives used by impacket (BSD-2-Clause / public-domain)
+    # Module 7 (web data/analytics API) — read-only FastAPI over the canonical
+    # DuckDB store; pathfinding = networkx over the §4 edge table (owner-approved,
+    # NO Neo4j dependency). All pure-Python/MIT-class wheels, no runtime network.
+    "fastapi==0.162.0",       # ASGI web framework (MIT)
+    "python-multipart==0.0.20",  # multipart/form-data artifact uploads (Apache-2.0)
+    "uvicorn==0.54.0",        # ASGI server (BSD-3-Clause)
+    "networkx==3.7",          # in-process attack-path graph algorithms (BSD-3-Clause)
+    "websockets==17.3",       # WebSocket transport for uvicorn (BSD-3-Clause)
+    # Later-module candidates (do NOT uncomment until that module's research locks them):
+    # "dissect.esedb",   # legacy ESE/NTDS parser (fallback if dissect.database regresses)
+    # "regipy",          # SAM/SECURITY/SYSTEM hive parsing (boot key)
+    # "lxml",            # GPP XML (SYSVOL)
+    # "fastapi",         # web API
+    # "uvicorn",         # ASGI server
+    # "jinja2",          # dossier templating
+    # "weasyprint",      # HTML -> PDF
+    # "networkx",        # pathing (under review: prefer Neo4j/rustworkx — see Phase-0 research)
+]
+
+[project.scripts]
+wraith = "wraith.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "black",
+    "mypy",
+    "httpx",  # fastapi.testclient transport for the M7 API tests
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ANN", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests legitimately use asserts (S101) and inline secret-like literals as test
+# fixtures (S105/S106 — not real credentials).
+"tests/**" = ["S101", "S105", "S106"]
+# The read-only API store composes a few queries with f-strings, but every
+# interpolated fragment is code-controlled (a module constant, a literal table
+# name from a fixed tuple, or a string of only "?" placeholders) — NEVER request
+# input; all user-supplied values are bound parameters. S608 is a false positive.
+"wraith/api/store.py" = ["S608"]
+# The opt-in merge fold composes IN (...) clauses from a string of only "?"
+# placeholders (one per selected source_id); every value is a bound parameter and
+# the table/column names are fixed literals. S608 is a false positive.
+"wraith/merge/fold.py" = ["S608"]
+# The M-MS1 source-ingest tests build synthetic INSERTs from fixed internal
+# literals (a constant provenance struct, a "?"-only placeholder helper); no
+# request/untrusted input is ever interpolated. S608 is a false positive here.
+"tests/test_ms1_source_ingest.py" = ["S101", "S105", "S106", "S608"]
+# The multi-domain loop tests count rows from a fixed tuple of internal table
+# names (no request/untrusted input is interpolated); S608 is a false positive.
+"tests/test_ms_multidomain_loop.py" = ["S101", "S105", "S106", "S608"]
+# The M-MS4a metadata-ingest tests build synthetic staging/observation INSERTs
+# from fixed internal literals (a constant provenance struct); no request/untrusted
+# input is interpolated. S608 is a false positive here.
+"tests/test_ms4a_metadata_ingest.py" = ["S101", "S105", "S106", "S608"]
+# The M-MS4b merge-fold tests build synthetic staging/observation INSERTs from
+# fixed internal literals and use inline secret-like digest fixtures (not real
+# credentials); no request/untrusted input is interpolated.
+"tests/test_ms4b_merge_fold.py" = ["S101", "S105", "S106", "S608"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+
+# duckdb ships no type stubs / py.typed; treat its import as untyped rather than
+# failing the strict gate. All WRAITH wrappers around it are fully typed.
+[[tool.mypy.overrides]]
+module = ["duckdb", "duckdb.*"]
+ignore_missing_imports = true
+
+# dissect.database ships no py.typed / stubs; treat its import as untyped rather
+# than failing the strict gate. The ESE backend adapter wraps it in fully-typed
+# code (wraith/parsing/ese_backend.py).
+[[tool.mypy.overrides]]
+module = ["dissect", "dissect.*"]
+ignore_missing_imports = true
+
+# impacket ships no py.typed / stubs; treat its import as untyped rather than
+# failing the strict gate. The 2b secret layer wraps it in fully-typed code
+# (wraith/parsing/ntds_secrets.py) and imports it lazily inside functions.
+[[tool.mypy.overrides]]
+module = ["impacket", "impacket.*"]
+ignore_missing_imports = true
+
+# networkx ships partial/no py.typed under our pin; treat its import as untyped
+# rather than failing the strict gate. The pathfinder (wraith/api/paths.py) wraps
+# it in fully-typed code.
+[[tool.mypy.overrides]]
+module = ["networkx", "networkx.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=wraith --cov-report=term-missing"
+markers = [
+    "real_dit: test builds a real ntds.dit store; run SOLO (concurrent builds deadlock)",
+]

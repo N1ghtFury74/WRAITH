@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WRAITH — Identity Directions</title>
+    <!--
+      Self-contained, OFFLINE identity chooser. Every mark below is inline SVG
+      (no external fetch, no raster dependency) drawn from ORIGINAL geometric
+      letterforms + geometry — no third-party font outlines or brand artwork.
+      Accent cyan #0891b2. Each direction is shown as a wordmark lockup + a
+      monogram/app-icon (+ mark where the direction uses a symbol), on LIGHT and
+      DARK, in accent and in neutral foreground, at TopBar (28px) and favicon
+      (16px) sizes so the 16px read is honest. PNGs of each piece sit beside this
+      file (…_{size}_{light|dark}.png) for pixel inspection.
+    -->
+    <style>
+      :root { --accent:#0891b2; --ink:#0b0f17; --paper:#f8fafc; }
+      * { box-sizing: border-box; }
+      body {
+        margin:0; font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+        color:#0b0f17; background:#eef1f5; padding:32px 16px 72px;
+      }
+      .wrap { max-width:1060px; margin:0 auto; }
+      h1 { font-size:26px; letter-spacing:-0.02em; margin:0 0 4px; }
+      .sub { color:#55606e; margin:0 0 20px; max-width:70ch; }
+      .note {
+        background:#fff; border:1px solid #e2e7ee; border-left:3px solid var(--accent);
+        border-radius:10px; padding:14px 16px; margin:0 0 28px; color:#39414d;
+        max-width:80ch;
+      }
+      .note b { color:#0b0f17; }
+      .card { border:1px solid #e2e7ee; border-radius:14px; background:#fff; margin:0 0 22px; overflow:hidden; }
+      .card > header { padding:16px 20px 12px; }
+      .card h2 { margin:0; font-size:17px; letter-spacing:-0.01em; }
+      .card h2 span { color:var(--accent); font-weight:600; }
+      .card p { margin:4px 0 0; color:#55606e; font-size:13.5px; max-width:78ch; }
+      .rec { outline:2px solid var(--accent); }
+      .rec .pill { display:inline-block; margin-left:8px; font-size:11px; font-weight:700;
+        color:#fff; background:var(--accent); border-radius:999px; padding:2px 9px; letter-spacing:0.02em; vertical-align:middle; }
+      .panels { display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid #e2e7ee; }
+      @media (max-width:720px){ .panels{ grid-template-columns:1fr; } }
+      .panel { padding:22px 20px; }
+      .panel.light { background:var(--paper); color:var(--ink); }
+      .panel.dark  { background:var(--ink);  color:var(--paper); border-left:1px solid #1b2230; }
+      @media (max-width:720px){ .panel.dark{ border-left:none; border-top:1px solid #1b2230; } }
+      .plabel { font:600 11px/1 ui-monospace,monospace; letter-spacing:0.08em; text-transform:uppercase;
+        opacity:0.5; margin:0 0 16px; }
+      .lockup { height:34px; display:block; width:auto; }
+      .lockup.accent { color:var(--accent); }
+      .row { display:flex; align-items:center; gap:22px; margin-top:20px; flex-wrap:wrap; }
+      .row .cap { font:600 10px/1.3 ui-monospace,monospace; opacity:0.45; }
+      .mk { display:inline-flex; align-items:center; justify-content:center; }
+      .accent { color:var(--accent); }
+      .sizes { display:flex; align-items:flex-end; gap:16px; }
+      .sizes figure { margin:0; text-align:center; }
+      .sizes figcaption { font:600 9px/1.4 ui-monospace,monospace; opacity:0.45; margin-top:6px; }
+      .tag { font-size:11px; color:#8792a1; margin:4px 0 0; }
+    </style>
+  </head>
+  <body>
+    <!-- ===== shared symbols (defined once, used everywhere) ===== -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <!-- wordmarks: constant-stroke geometric WRAITH -->
+        <symbol id="wmD1" viewBox="0 0 790 140">
+          <g fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="miter" stroke-linecap="square">
+            <path transform="translate(9 0)" d="M0 19 L37 121 L75 52 L113 121 L150 19"/>
+            <path transform="translate(207 0)" d="M0 121 L0 19 L62 19 Q96 19 96 45 Q96 71 62 71 L0 71"/><path transform="translate(207 0)" d="M52 71 L96 121"/>
+            <path transform="translate(351 0)" d="M0 121 L46 19 L92 121"/><path transform="translate(351 0)" d="M18 83 L74 83"/>
+            <path transform="translate(491 0)" d="M0 19 L0 121" opacity="0.4"/>
+            <path transform="translate(539 0)" d="M0 19 L92 19"/><path transform="translate(539 0)" d="M46 19 L46 121"/>
+            <path transform="translate(679 0)" d="M0 19 L0 121"/><path transform="translate(679 0)" d="M84 19 L84 121"/><path transform="translate(679 0)" d="M0 70 L84 70"/>
+          </g>
+        </symbol>
+        <symbol id="wmD2" viewBox="0 0 810 140">
+          <g fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="miter" stroke-linecap="square">
+            <path transform="translate(9 0)" d="M0 19 L37 121 L75 52 L113 121 L150 19"/>
+            <path transform="translate(211 0)" d="M0 121 L0 19 L62 19 Q96 19 96 45 Q96 71 62 71 L0 71"/><path transform="translate(211 0)" d="M52 71 L96 121"/>
+            <path transform="translate(359 0)" d="M0 121 L46 19 L92 121"/><path transform="translate(359 0)" d="M18 83 L74 83"/>
+            <path transform="translate(503 0)" d="M0 19 L0 121"/>
+            <path transform="translate(555 0)" d="M0 19 L92 19"/><path transform="translate(555 0)" d="M46 19 L46 121"/>
+            <path transform="translate(699 0)" d="M0 19 L0 121"/><path transform="translate(699 0)" d="M84 19 L84 121"/><path transform="translate(699 0)" d="M0 70 L84 70"/>
+          </g>
+        </symbol>
+        <symbol id="wmD3" viewBox="0 0 739 140">
+          <g fill="none" stroke="currentColor" stroke-width="15" stroke-linejoin="miter" stroke-linecap="square">
+            <path transform="translate(7.5 0)" d="M0 19 L37 121 L75 52 L113 121 L150 19"/>
+            <path transform="translate(196.5 0)" d="M0 121 L0 19 L62 19 Q96 19 96 45 Q96 71 62 71 L0 71"/><path transform="translate(196.5 0)" d="M52 71 L96 121"/>
+            <path transform="translate(331.5 0)" d="M0 121 L46 19 L92 121"/><path transform="translate(331.5 0)" d="M18 83 L74 83"/>
+            <path transform="translate(462.5 0)" d="M0 19 L0 121"/>
+            <path transform="translate(501.5 0)" d="M0 19 L92 19"/><path transform="translate(501.5 0)" d="M46 19 L46 121"/>
+            <path transform="translate(632.5 0)" d="M0 19 L0 121"/><path transform="translate(632.5 0)" d="M84 19 L84 121"/><path transform="translate(632.5 0)" d="M0 70 L84 70"/>
+          </g>
+        </symbol>
+        <symbol id="wmD4" viewBox="0 0 882 140">
+          <g fill="none" stroke="currentColor" stroke-width="24" stroke-linejoin="miter" stroke-linecap="square">
+            <path transform="translate(12 0)" d="M0 19 L37 121 L75 52 L113 121 L150 19"/>
+            <path transform="translate(226 0)" d="M0 121 L0 19 L62 19 Q96 19 96 45 Q96 71 62 71 L0 71"/><path transform="translate(226 0)" d="M52 71 L96 121"/>
+            <path transform="translate(386 0)" d="M0 121 L46 19 L92 121"/><path transform="translate(386 0)" d="M18 83 L74 83"/>
+            <path transform="translate(542 0)" d="M0 19 L0 121" opacity="0.4"/>
+            <path transform="translate(606 0)" d="M0 19 L92 19"/><path transform="translate(606 0)" d="M46 19 L46 121"/>
+            <path transform="translate(762 0)" d="M0 19 L0 121"/><path transform="translate(762 0)" d="M84 19 L84 121"/><path transform="translate(762 0)" d="M0 70 L84 70"/>
+          </g>
+        </symbol>
+        <!-- monograms -->
+        <symbol id="monoD1" viewBox="0 0 48 48">
+          <g fill="none" stroke="currentColor" stroke-width="6.4" stroke-linejoin="miter" stroke-linecap="butt">
+            <path d="M8 13 L17.5 37 L24 22.5 L30.5 37"/><path d="M30.5 37 L40 13" opacity="0.4"/>
+          </g>
+        </symbol>
+        <symbol id="monoD4" viewBox="0 0 48 48">
+          <g fill="none" stroke="currentColor" stroke-width="8.2" stroke-linejoin="miter" stroke-linecap="butt">
+            <path d="M8 13 L17.5 37 L24 22.5 L30.5 37"/><path d="M30.5 37 L40 13" opacity="0.4"/>
+          </g>
+        </symbol>
+        <symbol id="monoSolid" viewBox="0 0 48 48">
+          <g fill="none" stroke="currentColor" stroke-width="6.8" stroke-linejoin="miter" stroke-linecap="butt">
+            <path d="M8 13 L17.5 37 L24 22.5 L30.5 37"/><path d="M30.5 37 L40 13"/>
+          </g>
+        </symbol>
+        <symbol id="rift" viewBox="0 0 48 48">
+          <g fill="currentColor"><path d="M7 10 h15 v28 h-15 z"/><path opacity="0.42" d="M26 14 h15 v28 h-15 z"/></g>
+        </symbol>
+        <symbol id="tile" viewBox="0 0 48 48">
+          <rect x="3" y="3" width="42" height="42" rx="11" fill="#0891b2"/>
+          <path fill="#06151b" fill-rule="evenodd" d="M10.5 14 L15.5 14 L19.2 29.5 L23 17.5 L25 17.5 L28.8 29.5 L32.5 14 L37.5 14 L31.6 34 L26.6 34 L24 25.5 L21.4 34 L16.4 34 Z"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div class="wrap">
+      <h1>WRAITH — Identity Directions</h1>
+      <p class="sub">A brand <b>system</b> per direction (wordmark lockup + monogram/app-icon), not a single glyph. Pick a direction; wiring it in is one edit.</p>
+
+      <div class="note">
+        <b>Designed to three attributes:</b> <b>forensic precision</b> (constant-stroke, miter-sharp geometry), <b>spectral</b> (one restrained "revealed / vanishing" cue — never a mascot), and <b>disciplined restraint</b> (wordmark- and monogram-led, like Elastic / CrowdStrike / Wiz).<br /><br />
+        <b>Honest medium note:</b> LLM-authored SVG <b>mascot illustration</b> has a low ceiling — it reads amateur no matter the layering (that's why the two hand-drawn wraith creatures missed). What reads premium <b>and</b> is achievable in code is refined typography + precise geometry. These directions lead there. A literal, agency-grade illustrated spectre would need a vector tool (Illustrator / Figma) or an image generator — outside this offline code toolchain.
+      </div>
+
+      <!-- D1 -->
+      <section class="card rec">
+        <header>
+          <h2>D1 · <span>Stencil</span> <span class="pill">RECOMMENDED</span></h2>
+          <p>Custom constant-stroke WRAITH, slightly condensed, miter-sharp — forensic and precise. Monogram is a full geometric <b>W</b> whose final upstroke ghosts to 40% (the single spectral cue). Minimal: wordmark + monogram, no extra symbol. Monogram is square + <code>currentColor</code>, so it drops straight into the existing TopBar/About lockup with zero layout change.</p>
+        </header>
+        <div class="panels">
+          <div class="panel light">
+            <p class="plabel">Light</p>
+            <svg class="lockup accent"><use href="#wmD1"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#monoD1"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#monoD1"/></svg></span><figcaption>28 · topbar</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#monoD1"/></svg></span><figcaption>16 · favicon</figcaption></figure>
+                <figure><span class="mk" style="color:#0b0f17"><svg width="28" height="28"><use href="#monoD1"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <p class="plabel">Dark</p>
+            <svg class="lockup accent"><use href="#wmD1"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#monoD1"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#monoD1"/></svg></span><figcaption>28 · topbar</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#monoD1"/></svg></span><figcaption>16 · favicon</figcaption></figure>
+                <figure><span class="mk" style="color:#f8fafc"><svg width="28" height="28"><use href="#monoD1"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D2 -->
+      <section class="card">
+        <header>
+          <h2>D2 · <span>Rift</span></h2>
+          <p>Same letterforms, kept fully solid, paired with an abstract <b>spectral mark</b>: two offset planes — a solid leading bar and a faded "revealed layer" behind it. A symbol-led system for places a wordmark won't fit.</p>
+        </header>
+        <div class="panels">
+          <div class="panel light">
+            <p class="plabel">Light</p>
+            <svg class="lockup accent"><use href="#wmD2"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#rift"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#rift"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#rift"/></svg></span><figcaption>16</figcaption></figure>
+                <figure><span class="mk" style="color:#0b0f17"><svg width="28" height="28"><use href="#rift"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <p class="plabel">Dark</p>
+            <svg class="lockup accent"><use href="#wmD2"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#rift"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#rift"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#rift"/></svg></span><figcaption>16</figcaption></figure>
+                <figure><span class="mk" style="color:#f8fafc"><svg width="28" height="28"><use href="#rift"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D3 -->
+      <section class="card">
+        <header>
+          <h2>D3 · <span>Monolith</span></h2>
+          <p>Monogram-forward. A filled rounded-square tile with a knockout <b>W</b> — the strongest, most unmistakable app-icon at 16px. Wordmark is lighter/compact, playing support. The tile is two fixed colors (it does not inherit <code>currentColor</code>), so it needs a small wrapper if adopted for the in-app Logo.</p>
+        </header>
+        <div class="panels">
+          <div class="panel light">
+            <p class="plabel">Light</p>
+            <svg class="lockup accent"><use href="#wmD3"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk"><svg width="48" height="48"><use href="#tile"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk"><svg width="28" height="28"><use href="#tile"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk"><svg width="16" height="16"><use href="#tile"/></svg></span><figcaption>16</figcaption></figure>
+              </div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <p class="plabel">Dark</p>
+            <svg class="lockup accent"><use href="#wmD3"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk"><svg width="48" height="48"><use href="#tile"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk"><svg width="28" height="28"><use href="#tile"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk"><svg width="16" height="16"><use href="#tile"/></svg></span><figcaption>16</figcaption></figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D4 -->
+      <section class="card">
+        <header>
+          <h2>D4 · <span>Spectre</span></h2>
+          <p>A bolder, wider display take — heavier stroke, more presence for a hero or splash. Same phantom-upstroke monogram, thickened. Reads loud; less restrained than D1.</p>
+        </header>
+        <div class="panels">
+          <div class="panel light">
+            <p class="plabel">Light</p>
+            <svg class="lockup accent"><use href="#wmD4"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#monoD4"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#monoD4"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#monoD4"/></svg></span><figcaption>16</figcaption></figure>
+                <figure><span class="mk" style="color:#0b0f17"><svg width="28" height="28"><use href="#monoD4"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+          <div class="panel dark">
+            <p class="plabel">Dark</p>
+            <svg class="lockup accent"><use href="#wmD4"/></svg>
+            <div class="row">
+              <div class="sizes">
+                <figure><span class="mk accent"><svg width="48" height="48"><use href="#monoD4"/></svg></span><figcaption>48</figcaption></figure>
+                <figure><span class="mk accent"><svg width="28" height="28"><use href="#monoD4"/></svg></span><figcaption>28</figcaption></figure>
+                <figure><span class="mk accent"><svg width="16" height="16"><use href="#monoD4"/></svg></span><figcaption>16</figcaption></figure>
+                <figure><span class="mk" style="color:#f8fafc"><svg width="28" height="28"><use href="#monoD4"/></svg></span><figcaption>neutral</figcaption></figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="tag">Wired in: <b>D1 · Stencil</b> monogram → <code>src/components/shell/Logo.tsx</code>; favicon → <code>index.html</code>. Switch directions by swapping the monogram paths in those two files with another direction's SVG from this folder. PNGs of every piece (16/32/64/128, light + dark) sit beside this file.</p>
+    </div>
+  </body>
+</html>

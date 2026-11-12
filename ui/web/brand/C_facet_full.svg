@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="currentColor" style="color:#0891b2">
+<!-- shard crest -->
+<path opacity="0.5"  d="M24 2 L20 12 L24 9 Z"/>
+<path opacity="0.75" d="M24 2 L28 12 L24 9 Z"/>
+<path opacity="0.35" d="M16 7 L18 14 L21 11 Z"/>
+<path opacity="0.35" d="M32 7 L30 14 L27 11 Z"/>
+<!-- faceted head planes (left lighter, right darker -> volume) -->
+<path opacity="0.35" d="M24 9 L12 19 L17 33 L24 24 Z"/>
+<path opacity="0.6"  d="M24 9 L36 19 L31 33 L24 24 Z"/>
+<path opacity="0.5"  d="M12 19 L17 33 L24 42 L24 24 Z"/>
+<path opacity="0.78" d="M36 19 L31 33 L24 42 L24 24 Z"/>
+<!-- brow ridge facet -->
+<path opacity="0.9" d="M24 9 L30 16 L24 18 L18 16 Z"/>
+<!-- diamond glowing eyes -->
+<path opacity="1" d="M17 22 L21 20 L22 23 L18 25 Z"/>
+<path opacity="1" d="M31 22 L27 20 L26 23 L30 25 Z"/>
+<!-- node dots at crest tips (graph nod) -->
+<circle opacity="0.9" cx="24" cy="2.5" r="1"/>
+<circle opacity="0.5" cx="16" cy="7" r="0.8"/>
+<circle opacity="0.5" cx="32" cy="7" r="0.8"/>
+</svg>

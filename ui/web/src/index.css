@@ -1,0 +1,284 @@
+/* Self-hosted fonts (woff2 bundled by Vite from the @fontsource npm packages —
+   no Google Fonts link, no CDN). Inter for UI, JetBrains Mono for SIDs/hashes. */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ─── THEMING (doc 10 §2) ────────────────────────────────────────────────
+     Every Tailwind color is `hsl(var(--x) / <alpha-value>)`, so a theme is just
+     which token values are in scope — no `dark:` sprinkling, no component edits.
+
+     Precedence (highest → lowest):
+       1. explicit [data-theme="dark"|"light"]  (the manual toggle; wins always)
+       2. OS prefers-color-scheme: dark          (only when NO data-theme is set)
+       3. authored LIGHT default on :root        (valid first-paint theme for SSR)
+
+     The inline <head> script in index.html sets data-theme pre-paint from
+     localStorage("wraith.theme") so there is no flash of the wrong theme. */
+
+  /* 1 + 3 — LIGHT is the authored default (also under an explicit light choice). */
+  :root,
+  :root[data-theme="light"] {
+    color-scheme: light;
+
+    /* Surfaces (light steps light→lighter + shadow; white cards float on gray). */
+    --background: 220 20% 97%; /* #f6f7f9 page base */
+    --surface: 0 0% 100%; /* #ffffff panels / rails */
+    --surface-raised: 210 17% 95%; /* #f1f3f5 cards, inputs, hover */
+    --surface-overlay: 0 0% 100%; /* #ffffff popovers (+ shadow) */
+
+    /* Fills / lines */
+    --muted: 214 24% 93%; /* #e9edf2 chips, track fills */
+    --border: 216 33% 91%; /* #e2e8f0 decorative hairline */
+    --border-strong: 215 13% 65%; /* #9aa5b4 hover/card edge */
+    --input: 216 13% 54%; /* #7a8699 control border — 3.6:1 on white */
+
+    /* Text (three legible tiers — never dim further with opacity) */
+    --foreground: 222 47% 11%; /* #0f172a primary   (16.7:1 on page) */
+    --foreground-secondary: 215 19% 35%; /* #475569 secondary (7.1:1) */
+    --muted-foreground: 213 14% 42%; /* #5e6b7a tertiary  (5.1:1) */
+
+    /* Accent + focus — deep cyan so it survives as text/link on white. */
+    --accent: 192 82% 31%; /* #0e7490 link/fill accent (white-on = 5.4:1) */
+    --accent-foreground: 0 0% 100%; /* #ffffff text on accent fills */
+    --ring: 192 91% 36%; /* #0891b2 focus ring (3.7:1 vs white) */
+
+    /* Semantic (Tier-0 is CHIPPED in light — see badge.tsx — never hue-only). */
+    --available: 142 72% 29%; /* #15803d green  5.0:1 */
+    --degraded: 26 90% 37%; /* #b45309 amber  5.0:1 */
+    --unavailable: 0 74% 42%; /* #b91c1c error red 6.5:1 */
+    --tier0: 0 72% 51%; /* #dc2626 high-value red 4.8:1 */
+
+    /* Elevation leans on SHADOW in light (surface steps are subtle). */
+    --shadow-raised: 0 1px 2px 0 rgb(15 23 42 / 0.08);
+    --shadow-overlay: 0 10px 30px -6px rgb(15 23 42 / 0.16), 0 3px 8px -3px rgb(15 23 42 / 0.12);
+    --ring-highlight: inset 0 1px 0 0 rgb(255 255 255 / 0.6);
+  }
+
+  /* The dark SOC palette (owner: "dark in black color, niche / high-end"): a
+     near-pure-black cool stack where elevation leans on the SURFACE step (shadow
+     barely reads on black). Shared by the explicit choice (2 above applies it
+     via the media query when nothing is chosen) — kept in one mixin-less block
+     that is repeated verbatim in the media query below (plain CSS has no @extend). */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: 222 16% 3.5%; /* #08090b near-pure black page base */
+    --surface: 222 14% 6%; /* #0d0f12 panels / rails */
+    --surface-raised: 222 13% 9%; /* #14171c cards, inputs, hover */
+    --surface-overlay: 222 12% 12%; /* #191d23 popovers, dropdowns */
+    --muted: 222 10% 17%; /* #262b33 chips, track fills */
+    --border: 222 10% 13%; /* #1b1f26 hairline separators */
+    --border-strong: 222 10% 21%; /* #2f353f hover/focus card edge */
+    --input: 222 10% 17%; /* #262b33 input border */
+    --foreground: 216 24% 95%; /* #eef1f6 primary   (>=16.8:1) */
+    --foreground-secondary: 217 16% 78%; /* #c4ccd8 secondary (>=10.9:1) */
+    --muted-foreground: 220 10% 65%; /* #9aa3b2 tertiary  (>=7.4:1) */
+    --accent: 190 90% 50%; /* #0dccf2 interactive cyan */
+    --accent-foreground: 222 16% 3.5%; /* on-accent = base */
+    --ring: 190 90% 55%; /* #2ad4f5 focus ring */
+    --available: 145 63% 49%; /* #2ecc70 green */
+    --degraded: 38 95% 58%; /* #f9a620 amber */
+    --unavailable: 0 75% 62%; /* #e75555 error red */
+    --tier0: 0 90% 68%; /* #f76464 high-value red */
+    --shadow-raised: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-overlay: 0 8px 24px -4px rgb(0 0 0 / 0.55), 0 2px 6px -2px rgb(0 0 0 / 0.45);
+    --ring-highlight: inset 0 1px 0 0 rgb(255 255 255 / 0.04);
+  }
+
+  /* 2 — OS preference ONLY when the user has not chosen (no data-theme attr).
+     A manual choice always wins because it sets data-theme explicitly. The
+     token list is identical to [data-theme="dark"] above. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      color-scheme: dark;
+      --background: 222 16% 3.5%;
+      --surface: 222 14% 6%;
+      --surface-raised: 222 13% 9%;
+      --surface-overlay: 222 12% 12%;
+      --muted: 222 10% 17%;
+      --border: 222 10% 13%;
+      --border-strong: 222 10% 21%;
+      --input: 222 10% 17%;
+      --foreground: 216 24% 95%;
+      --foreground-secondary: 217 16% 78%;
+      --muted-foreground: 220 10% 65%;
+      --accent: 190 90% 50%;
+      --accent-foreground: 222 16% 3.5%;
+      --ring: 190 90% 55%;
+      --available: 145 63% 49%;
+      --degraded: 38 95% 58%;
+      --unavailable: 0 75% 62%;
+      --tier0: 0 90% 68%;
+      --shadow-raised: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+      --shadow-overlay: 0 8px 24px -4px rgb(0 0 0 / 0.55), 0 2px 6px -2px rgb(0 0 0 / 0.45);
+      --ring-highlight: inset 0 1px 0 0 rgb(255 255 255 / 0.04);
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  /* ─── TEXT-SIZE (density) ───────────────────────────────────────────────────
+     The in-app A− / A / A+ control scales the ENTIRE UI by the root font-size,
+     so every rem-based type + spacing token moves proportionally — a display-
+     scaling knob the owner controls regardless of OS / browser zoom. `normal`
+     sets NO attribute and keeps the browser-default 16px root (the shipped dense
+     look); only the two non-default stops force an absolute px root. The inline
+     <head> script applies the stored choice pre-paint so there is no size flash. */
+  html[data-density="compact"] {
+    font-size: 14px;
+  }
+  html[data-density="comfortable"] {
+    font-size: 18px;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    /* Firefox scrollbar styling (WebKit handled below). */
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background: hsl(var(--muted));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--border-strong));
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Respect reduced-motion (doc 16 P2.5): collapse animations/transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* ─── TYPE CONTRACT (doc 10 §7.1 — the ONE cross-page role→token map) ───────
+     Every page uses the SAME token for the SAME role so nothing reads bigger on
+     one screen than another. Semantic tokens only (tailwind.config fontSize) —
+     never a raw `text-[..]`, `text-xs`, `text-2xl`.
+
+     Dense (SOC-grade) scale — token px shrank app-wide; roles are UNCHANGED.
+
+       ROLE                              TOKEN
+       Standalone hero (About/Limitations page title)   hero        19/25.6
+       Headline stat figure (Risk tiles — standalone)   hero (mono) 19
+       In-app page title (Cases/Dossiers/Graph/…)       display     16/22.4/600
+       Card / section title (CardTitle)                 body + 600  13/18.4
+       Capability / list-row primary label              body-sm+600 12/16.8
+       Section label / overline                         eyebrow     11 upper
+       Body copy                                        body        13/18.4
+       Dense / table row · dossier field (sans)         body-sm     12/16.8
+       Metadata / caption                               caption     11.5/15.2
+       Forensic detail · counts · micro                 micro       11/14
+
+     MONO-VALUE RULE — JetBrains Mono reads ~1 optical step LARGER than Inter at
+     the same px, so a mono value is set ONE token below the sans it pairs with,
+     making the two read as the SAME visual size (this is the owner's recurring
+     "mono looks oversized next to the label" fix). Apply EVERYWHERE mono appears:
+       · mono inside / beside a `body` (13) line   → `body-sm` (12) mono  (the `.mono` default)
+       · mono identity value under an eyebrow label → `caption`  (11.5) mono
+       · mono chip / inline tag                     → `caption`  (11.5) mono
+       · mono count already in a caption/micro line → inherits (≤11.5 — delta is negligible)
+       · standalone headline figure (no sans at its size, e.g. Risk tiles) → may keep `hero` mono
+     The sans partner keeps its own token; only the mono side steps down. */
+  .mono {
+    @apply font-mono text-body-sm tracking-tight;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Micro eyebrow: the single uppercase-label spec (11px, full-strength tertiary). */
+  .eyebrow {
+    @apply text-micro font-semibold uppercase tracking-[0.07em] text-muted-foreground;
+  }
+
+  /* Subtle top-edge highlight for raised surfaces. */
+  .elevated {
+    box-shadow: var(--shadow-raised), var(--ring-highlight);
+  }
+
+  /* Graceful wrapping for long identity values (SID/DN/SPN/hash): break at a
+     space when there is one, and only split an over-long unbroken token as a
+     last resort — never chop a readable word mid-character like `break-all`. */
+  .break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+}
+
+/* Print-to-PDF (doc 18 §4): zero-dep window.print(). Hide app chrome + any
+   .no-print control, force light-on-white for a legible analyst artifact, and
+   keep each dossier/section whole across page breaks. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* Neutralize the dark theme inside a print surface: white page, black text,
+     light hairlines — so nothing relies on screen-only contrast. */
+  .print-root,
+  .print-root * {
+    color: #000 !important;
+    background: transparent !important;
+    border-color: #bbb !important;
+    box-shadow: none !important;
+  }
+  .print-root {
+    background: #fff !important;
+  }
+  .dossier-entity {
+    break-after: page;
+    break-inside: avoid;
+  }
+  .dossier-entity:last-child {
+    break-after: auto;
+  }
+  .dossier-section {
+    break-inside: avoid;
+  }
+  .dossier-footer {
+    break-inside: avoid;
+  }
+}

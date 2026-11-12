@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Both schemes supported (doc 10 §2.3) so native controls/scrollbars/canvas
+         backdrop match the active theme instantly. -->
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="WRAITH — Know what the attacker knows. Offline Active Directory forensics: rebuild the privilege map from dead-disk DC artifacts, entirely offline."
+    />
+    <!-- Favicon: the WRAITH mark — direction "D3 · Monolith": a rounded-square
+         accent tile with a knockout "W", identical to the Logo.tsx component mark.
+         Self-contained (cyan field + dark letter) so it reads crisply at 16px and
+         is theme-independent on light + dark tabs. Inline SVG data URI (no external
+         fetch — offline guarantee); the only URL is the inert SVG namespace. Switch
+         directions via ui/web/brand/ (the preview page + alt SVGs). -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='3' y='3' width='42' height='42' rx='11' fill='%230891b2'/%3E%3Cpath fill='%2306151b' fill-rule='evenodd' d='M10.5 14 L15.5 14 L19.2 29.5 L23 17.5 L25 17.5 L28.8 29.5 L32.5 14 L37.5 14 L31.6 34 L26.6 34 L24 25.5 L21.4 34 L16.4 34 Z'/%3E%3C/svg%3E"
+    />
+    <title>WRAITH</title>
+    <!-- FOUC guard (doc 10 §2.3): set data-theme from storage BEFORE first paint
+         so the correct token block is already in scope — no flash of wrong theme.
+         Inline + first-party (no network round-trip). "system"/unset leaves the
+         attribute off so the prefers-color-scheme media query + light default win. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("wraith.theme");
+          if (t === '"light"' || t === "light") document.documentElement.dataset.theme = "light";
+          else if (t === '"dark"' || t === "dark") document.documentElement.dataset.theme = "dark";
+        } catch (e) {}
+      })();
+    </script>
+    <!-- Text-size (density) guard: scale the root font-size BEFORE first paint
+         from localStorage("wraith.density") so the whole rem-based UI renders at
+         the chosen size with no flash. "normal"/unset leaves the attribute off so
+         the shipped 16px-root dense look wins. Inline + first-party (no network). -->
+    <script>
+      (function () {
+        try {
+          var d = localStorage.getItem("wraith.density");
+          if (d === '"compact"' || d === "compact")
+            document.documentElement.dataset.density = "compact";
+          else if (d === '"comfortable"' || d === "comfortable")
+            document.documentElement.dataset.density = "comfortable";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
